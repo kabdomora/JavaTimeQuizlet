@@ -56,3 +56,21 @@ let allQuestions = [
     answer: "3",
   }
 ]
+
+function quizTime() {
+  var timeLeft = 120;
+
+  var timeInterval = setInterval(() => {
+    if (timeLeft > 1) {
+      timer.textContent = timeLeft + "seconds remaining";
+      timeLeft--;
+    } else if (timeLeft === 1) {
+      timer.textContent = timeLeft + "second remaining";
+      timeLeft--;
+    } else {
+      timer.textContent = "";
+      clearInterval(timeInterval);
+      endQuiz();
+    }
+  }, 1000);
+}
