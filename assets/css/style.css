@@ -40,7 +40,8 @@
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 6px 0px rgba(0, 0, 0, 0.2) 0px 1px 1px
       0px;
     color: hsl(0, 0%, 100%);
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     font-size: 22px;
     line-height: 22px;
     margin: 16px 16px 16px 20px;
@@ -59,8 +60,10 @@
     margin: 0 auto;
     max-width: 800px;
     padding: 30px 40px;  
-    display: block;
+    display: none;
   }
+
+
 
 
 
