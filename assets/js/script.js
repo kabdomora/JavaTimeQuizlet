@@ -5,7 +5,18 @@ var timer = document.querySelector("#timer");
 var thisQuestion = document.querySelector("#question");
 var choices = document.querySelector("#choices");
 var highScores = document.querySelector("#high-scores");
+var hScard = document.querySelector('.high-scores');
+var scores = [];
 
+function init() {
+  var storedScores = JSON.parse(localStorage.getItem("scores"));
+
+  if (storedScores !== null) {
+    scores = storedScores;
+  }
+
+  nextQuestion();
+}
 
 
 startBtn.addEventListener("click", function() {
@@ -78,8 +89,6 @@ function quizTime() {
 // timer increment
 
 var index=-1;
-var currentQuestion;
-
 
 function nextQuestion() {
   index = index + 1;
@@ -102,8 +111,6 @@ function nextQuestion() {
 }
 // increment through quiz questions
 
-nextQuestion();
-
 
 choices.addEventListener('click', function(event) {
   event.preventDefault();
@@ -115,6 +122,12 @@ choices.addEventListener('click', function(event) {
 })
 // function to produce the next question on answer click
 
+// need function to keep score and store in localstorage
+let score = 5;
+
+function keepScore() {
+
+}
 
 function endQuiz() {
   // write end quiz function here
@@ -125,14 +138,59 @@ function endQuiz() {
   restartButton.setAttribute('class', "btn restart");
   restartButton.innerHTML = 'Start Over';
   highScores.appendChild(restartButton);
+  // reset everything
+  const resetButton = document.createElement('button');
+  resetButton.setAttribute('class', "btn reset");
+  resetButton.innerHTML = 'Clear All History';
+  highScores.appendChild(resetButton);
   // tally score
+  var myName = prompt("Enter your name to see your score!");
+  var newScore = {
+    name: myName,
+    score: score
+  }
+  scores.push(newScore)
+  localStorage.setItem('scores', JSON.stringify(scores));
+
+
   // display score in list
+  hScard.setAttribute("style", "display:block");
+  scores.forEach((value, index) => {
+    if (index >= 0) {
+      var thisName = value.name;
+      var thisScore = value.score;
+
+      const displayScore = document.createElement('li');
+      displayScore.innerHTML = `Player: ${thisName}: ${thisScore}`;
+
+      highScores.appendChild(displayScore);
+    }
+
+    
+  })
 }
 
+// start the game over
 highScores.addEventListener('click', function(event) {
   var element = event.target;
 
   if (element.classList.contains('restart') === true) {
+    hScard.setAttribute("style", "display:none");
     location.reload();
   }
 })
+
+// clear all score history and start game over
+highScores.addEventListener('click', function(event) {
+  var element = event.target;
+
+  if (element.classList.contains('reset') === true) {
+    hScard.setAttribute("style", "display:none");
+    localStorage.clear();
+    location.reload();
+  }
+})
+
+init();
+
+// clear high scores
