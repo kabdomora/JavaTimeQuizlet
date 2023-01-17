@@ -77,18 +77,44 @@ function quizTime() {
 }
 // timer increment
 
-allQuestions.forEach((value, index) => {
-  if (index>=0) {
-    var que = value.question;
-    
-    thisQuestion.innerHTML = `${que}`;
-  }
+var index=-1;
+var currentQuestion;
 
-  // create the card container in the for each statement and append the question 
-  // and associated answers
-  // auto set the ID attribute for each card container to absolute block/none and
-  // increment through the block/none as answers are selected.
+
+function nextQuestion() {
+  index = index + 1;
+  choices.innerHTML = ''; 
+
+  if (index > allQuestions.length -1) {
+    endQuiz();
+  } else {    
+    thisQuestion.innerHTML = allQuestions[index].question;       
+    allQuestions[index].options.forEach((option, index) => {
+      if (index >= 0) {
+        const optionButtons = document.createElement('button');
+        optionButtons.setAttribute('class', "btn choice");
+        optionButtons.innerHTML = `${option}`;
+        
+        choices.appendChild(optionButtons);
+      }
+    });
+  }
+}
+// increment through quiz questions
+
+nextQuestion();
+
+
+choices.addEventListener('click', function(event) {
+  event.preventDefault();
+  var element = event.target;
+
+  if (element.classList.contains('choice') === true) {
+    nextQuestion();
+  }
 })
+// function to produce the next question on answer click
+
 
 function endQuiz() {
   // write end quiz function here
