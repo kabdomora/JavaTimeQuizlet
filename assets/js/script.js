@@ -13,7 +13,7 @@ startBtn.addEventListener("click", function() {
 	quiz.setAttribute("style", "display:block");
   quizTime();
 });
-// hides start button and makes quiz question container visible
+// hides start button and makes quiz question container and timer visible
 
 let allQuestions = [
   {
@@ -118,4 +118,21 @@ choices.addEventListener('click', function(event) {
 
 function endQuiz() {
   // write end quiz function here
+  quiz.setAttribute("style", "display:none");
+  timer.setAttribute("style", "display:none");
+  // restart
+  const restartButton = document.createElement('button');
+  restartButton.setAttribute('class', "btn restart");
+  restartButton.innerHTML = 'Start Over';
+  highScores.appendChild(restartButton);
+  // tally score
+  // display score in list
 }
+
+highScores.addEventListener('click', function(event) {
+  var element = event.target;
+
+  if (element.classList.contains('restart') === true) {
+    location.reload();
+  }
+})
