@@ -2,11 +2,15 @@ var startBtn = document.querySelector("#start");
 var begin = document.querySelector(".card-start");
 var quiz = document.querySelector(".card");
 var timer = document.querySelector("#timer");
+var timerText = document.querySelector("#timerText");
+var timeLeft = 120;
+var secondsLeft;
 var thisQuestion = document.querySelector("#question");
 var choices = document.querySelector("#choices");
 var highScores = document.querySelector("#high-scores");
 var hScard = document.querySelector('.high-scores');
 var scores = [];
+var quizStatus = true;
 
 function init() {
   var storedScores = JSON.parse(localStorage.getItem("scores"));
@@ -23,6 +27,7 @@ startBtn.addEventListener("click", function() {
 	begin.setAttribute("style", "display:none");
 	quiz.setAttribute("style", "display:block");
   quizTime();
+  quizStatus = true;
 });
 // hides start button and makes quiz question container and timer visible
 
@@ -69,33 +74,18 @@ let allQuestions = [
   }
 ]
 
-function quizTime() {
-  var timeLeft = 120;
 
-  var timeInterval = setInterval(() => {
-    if (timeLeft > 1) {
-      timer.textContent = timeLeft + " seconds remaining";
-      timeLeft--;
-    } else if (timeLeft === 1) {
-      timer.textContent = timeLeft + " second remaining";
-      timeLeft--;
-    } else {
-      timer.textContent = "";
-      clearInterval(timeInterval);
-      endQuiz();
-    }
-  }, 1000);
-}
-// timer increment
+
 
 var index=-1;
-
+// increment through quiz questions
 function nextQuestion() {
   index = index + 1;
   choices.innerHTML = ''; 
 
   if (index > allQuestions.length -1) {
     endQuiz();
+    quizStatus = false;
   } else {    
     thisQuestion.innerHTML = allQuestions[index].question;       
     allQuestions[index].options.forEach((option, index) => {
@@ -109,30 +99,64 @@ function nextQuestion() {
     });
   }
 }
-// increment through quiz questions
 
-
+let score = 5;
+// function to produce the next question on answer click
 choices.addEventListener('click', function(event) {
   event.preventDefault();
   var element = event.target;
 
   if (element.classList.contains('choice') === true) {
+    var thisAnswer = allQuestions[index].answer;
+    if(element.innerHTML === thisAnswer) {
+      score = score + 1
+      alert('Correct!');
+    } else {
+      timeLeft = timeLeft - 20;
+      alert(`Wrong! The correct answer is ${thisAnswer}`)
+    }
     nextQuestion();
   }
 })
-// function to produce the next question on answer click
 
-// need function to keep score and store in localstorage
-let score = 5;
+// timer increment 
+function quizTime() {
 
-function keepScore() {
-
+  var timeInterval = setInterval(() => {
+    if (timeLeft > 1 && quizStatus) {
+      timer.textContent = timeLeft;
+      timeLeft--;
+      if(!secondsLeft) {
+        secondsLeft = document.createElement('p');
+        secondsLeft.textContent = ' seconds left';
+        timerText.appendChild(secondsLeft);
+      }
+    } else if (timeLeft === 1 && quizStatus) {
+      timer.textContent = timeLeft;
+      timeLeft--;
+      if(secondsLeft) {
+        secondsLeft.textContent = ' second left';
+      } else {
+        secondsLeft = document.createElement('p');
+        secondsLeft.textContent = ' second left';
+        timerText.appendChild(secondsLeft);
+      }
+    } else {
+      secondsLeft.remove();
+      timer.innerHTML = "Out of Time!";
+      clearInterval(timeInterval);
+      endQuiz();
+      quizStatus = false;
+    }
+  }, 1000);
 }
 
 function endQuiz() {
   // write end quiz function here
   quiz.setAttribute("style", "display:none");
   timer.setAttribute("style", "display:none");
+  secondsLeft.remove();
+  highScores.innerHTML = "";
   // restart
   const restartButton = document.createElement('button');
   restartButton.setAttribute('class', "btn restart");
@@ -144,14 +168,15 @@ function endQuiz() {
   resetButton.innerHTML = 'Clear All History';
   highScores.appendChild(resetButton);
   // tally score
-  var myName = prompt("Enter your name to see your score!");
-  var newScore = {
-    name: myName,
-    score: score
+  if (quizStatus === true) {
+    var myName = prompt("Enter your name to see your score!");
+    var newScore = {
+      name: myName,
+      score: score
+    }
+    scores.push(newScore)
+    localStorage.setItem('scores', JSON.stringify(scores));
   }
-  scores.push(newScore)
-  localStorage.setItem('scores', JSON.stringify(scores));
-
 
   // display score in list
   hScard.setAttribute("style", "display:block");
@@ -193,4 +218,4 @@ highScores.addEventListener('click', function(event) {
 
 init();
 
-// clear high scores
+
