@@ -33,44 +33,45 @@ startBtn.addEventListener("click", function() {
 
 let allQuestions = [
   {
-    question: "Question 1",
-    options: ["1", "2", "3", "4"],
-    answer: "2",
+    question: "Which of the following is not a coding language?",
+    options: ["JS", "HTML", "CSS", "BrB"],
+    answer: "BrB",
   },
   {
-    question: "Question 2",
-    options: ["1", "2", "3", "4"],
-    answer: "1",
+    question: "What element would one use for end-user text entry?",
+    options: ["p ", "div", "input", "button"],
+    answer: "input",
   },
   {
-    question: "Question 3",
-    options: ["1", "2", "3", "4"],
-    answer: "2",
+    question: "How could one establish formatting criteria for < div id='user' class ='box' >< / div > in CSS?",
+    options: ["#div{}", ".user{}", ".box{}", "div-user-box{}"],
+    answer: ".box{}",
   },
   {
-    question: "Question 4",
-    options: ["1", "2", "3", "4"],
-    answer: "4",
+    question: "What does it mean to 'traverse the DOM'?",
+    options: ["Establish rules for the application to follow", 
+              "Refer elements in JS by their parent or child affiliation", 
+              "Store session data for use later on", 
+              "Security feature to mitigate hacking"],
+    answer: "Refer elements in JS by their parent or child affiliation", 
   },
   {
-    question: "Question 5",
-    options: ["1", "2", "3", "4"],
-    answer: "3",
+    question: "What does HTML stand for?",
+    options: ["HyperText Markup Language", 
+              "Human Type Markup Language", 
+              "Hi-Tech Markup Language", 
+              "Hello To My Language"],
+    answer: "HyperText Markup Language",
   },
   {
-    question: "Question 6",
-    options: ["1", "2", "3", "4"],
-    answer: "1",
+    question: "What does CSS stand for?",
+    options: ["Circadian Style Sheet", "Cascading Style Sheet", "Cordless Style Sheet", "Computing Style Sheet"],
+    answer: "Cascading Style Sheet",
   },
   {
-    question: "Question 7",
-    options: ["1", "2", "3", "4"],
-    answer: "2",
-  },
-  {
-    question: "Question 8",
-    options: ["1", "2", "3", "4"],
-    answer: "3",
+    question: "Where would one typically provide links for webpage/application navigation?",
+    options: ["Header Section", "Footer Section", "Body Section", "Within a Form"],
+    answer: "Header Section",
   }
 ]
 
@@ -100,7 +101,7 @@ function nextQuestion() {
   }
 }
 
-let score = 5;
+let score = 0;
 // function to produce the next question on answer click
 choices.addEventListener('click', function(event) {
   event.preventDefault();
@@ -109,7 +110,7 @@ choices.addEventListener('click', function(event) {
   if (element.classList.contains('choice') === true) {
     var thisAnswer = allQuestions[index].answer;
     if(element.innerHTML === thisAnswer) {
-      score = score + 1
+      score = score + 10
       alert('Correct!');
     } else {
       timeLeft = timeLeft - 20;
